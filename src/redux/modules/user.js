@@ -22,7 +22,60 @@ const initialState = {
 
 //middleware
 export const signUpAPI = (_account) => {
-  return function (dispatch, getState, { history }) {};
+  return function (dispatch, getState, { history }) {
+    console.log(_account);
+    const account = {
+      email: _account.email,
+      nickname: _account.nickname,
+      password: _account.password,
+    };
+    apis
+      .checkEmail(account.email)
+      .then((res) => {
+        console.log(res);
+        apis
+          .checkNickname(account.nickname)
+          .then((res) => {
+            console.log(res);
+            apis
+              .registerUser(account)
+              .then((rec) => {
+                console.log(res);
+                history.push("/login");
+              })
+              .catch((err) => {
+                dispatch(setError(err.response.data.msg));
+              });
+          })
+          .catch((err) => {
+            dispatch(setError(err.response.data.msg));
+          });
+      })
+      .catch((err) => {
+        dispatch(setError(err.response.data.msg));
+      });
+  };
+};
+
+export const logInAPI = (account) => {
+  return function (dispatch, getState, { history }) {
+    console.log(account);
+    apis
+      .logIn(account)
+      .then((res) => {
+        console.log(res);
+        const token = res.data.token;
+        const user = res.data.user;
+        localStorage.setItem("token", token);
+        dispatch(setUser(user));
+        history.push("/");
+      })
+      .catch((err) => {
+        console.log(err.response);
+        console.log(err);
+        dispatch(setError(err.response.data.msg));
+      });
+  };
 };
 
 //reducer
@@ -50,6 +103,9 @@ export default handleActions(
   initialState,
 );
 
-const userActions = {};
+const userActions = {
+  signUpAPI,
+  logInAPI,
+};
 
 export { userActions };
