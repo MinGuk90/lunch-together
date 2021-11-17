@@ -78,6 +78,23 @@ export const logInAPI = (account) => {
   };
 };
 
+export const logOutAPI = () => {
+  return function (dispatch, getState, { history }) {
+    localStorage.removeItem("token");
+    dispatch(logOut());
+    history.replace("/");
+  };
+};
+
+export const getUserAPI = () => {
+  return function (dispatch, getState, { history }) {
+    apis.getUser().then((res) => {
+      const user = res.data.data.user[0];
+      dispatch(setUser(user));
+    });
+  };
+};
+
 //reducer
 export default handleActions(
   {
@@ -106,6 +123,8 @@ export default handleActions(
 const userActions = {
   signUpAPI,
   logInAPI,
+  logOutAPI,
+  getUserAPI,
 };
 
 export { userActions };

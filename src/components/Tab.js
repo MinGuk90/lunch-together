@@ -20,21 +20,18 @@ const TabMenu = styled.ul`
   }
 `;
 
-const Desc = styled.div``;
-
 export const Tab = () => {
   const [currentTab, setCurrentTab] = useState(0);
 
   const menuArr = [
     { name: "Tab1", content: "Tab menu ONE" },
     { name: "Tab2", content: "Tab menu TWO" },
-    { name: "Tab3", content: "Tab menu THREE" },
+    { name: "Tab3", content: "Tab menu TREE" },
   ];
 
   const selectMenuHandler = (index) => {
     setCurrentTab(index);
   };
-
   return (
     <>
       <div>
@@ -51,10 +48,9 @@ export const Tab = () => {
             );
           })}
         </TabMenu>
-        <Desc>
+        <div>
           <h1>{menuArr[currentTab].content}</h1>
-          <p>바뀌는거 맞습니다..</p>
-        </Desc>
+        </div>
       </div>
     </>
   );
