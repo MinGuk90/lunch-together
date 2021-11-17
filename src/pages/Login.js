@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
+import { apis } from "../shared/axios";
+import { history } from "../redux/configureStore";
 import { useDispatch, useSelector } from "react-redux";
 import { userActions } from "../redux/modules/user";
 
@@ -25,6 +27,44 @@ const Login = (props) => {
 
   const logIn = () => {
     dispatch(userActions.logInAPI(account));
+  };
+
+  const { Kakao } = window;
+
+  const loginWithKakao = () => {
+    // 카카오 로그인
+    Kakao.Auth.login({
+      success: (authObj) => {
+        console.log(authObj);
+
+        // 유저정보 요청코드
+        Kakao.API.request({
+          url: "/v2/user/me",
+          data: {
+            property_keys: ["properties.profile_image", "properties.nickname"],
+          },
+          success: async function (res) {
+            const user = {
+              id: res.id,
+              image: res.properties.profile_image,
+              nickname: res.properties.nickname,
+            };
+            const data = await apis.kakaologin(user);
+            const token = data.data.token;
+            if (token) {
+              localStorage.setItem("token", token);
+              dispatch(userActions.getUserAPI());
+              history.push("/");
+            } else {
+              window.alert("로그인에 실패했습니다.");
+            }
+          },
+          fail: function (error) {
+            console.log(error);
+          },
+        });
+      },
+    });
   };
 
   const error = useSelector((state) => state.user.error);
