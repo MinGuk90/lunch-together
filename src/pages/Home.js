@@ -21,7 +21,6 @@ const Home = () => {
         <Box />
         <Box />
         <Box />
-        <Box />
       </Fade>
     </CardWrap>
   );
