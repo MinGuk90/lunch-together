@@ -16,12 +16,12 @@ function App() {
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
 
-  useEffect(() => {
-    Kakao.init(process.env.REACT_APP_KAKAO_API_KEY);
-    if (token) {
-      dispatch(userActions.getUserAPI());
-    }
-  }, []);
+  // useEffect(() => {
+  //   Kakao.init(process.env.REACT_APP_KAKAO_API_KEY);
+  //   if (token) {
+  //     dispatch(userActions.getUserAPI());
+  //   }
+  // }, []);
   return (
     <React.Fragment>
       <ConnectedRouter history={history}>
